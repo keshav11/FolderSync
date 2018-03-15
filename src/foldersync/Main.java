@@ -8,13 +8,45 @@ import java.util.Map;
 public class Main {
 
     private static Map<WatchKey, Path> watchKeys = new HashMap<>();
+    private static boolean copy(Path modFile,  Path modPath) throws IOException {
+        for(Path dest: watchKeys.values()) {
+            Path destPath = Paths.get(dest.toString(), modFile.toString());
+            System.out.println("Source: " + modPath.toString());
+            System.out.println("Destination: " + destPath.toString());
+            if(modPath.compareTo(destPath) != 0)
+                Files.copy(modPath, destPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        }
 
-    private static boolean syncDirs(WatchEvent event, WatchKey eventKey) {
+        return true;
+    }
+
+    private static boolean syncDirs(WatchEvent event, WatchKey eventKey) throws IOException {
         Path modFile = (Path) event.context();
         Path modDir = watchKeys.get(eventKey);
+        Path modPath = Paths.get(modDir.toString(), modFile.toString());
 
         System.out.println(event.kind() + " in directory " + modDir);
         System.out.println(event.kind() + " for file " + modFile);
+        if(event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+            copy(modFile, modPath);
+        }
+        else if(event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+            copy(modFile, modPath);
+        }
+        else if(event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
+            for(Path dest: watchKeys.values()) {
+                Path destPath = Paths.get(dest.toString(), modFile.toString());
+                System.out.println("Deleting: " + destPath.toString());
+                if(modPath.compareTo(destPath) != 0) {
+                    try {
+                        Files.delete(destPath);
+                    } catch (NoSuchFileException ex) {
+                        System.out.println(ex.toString());
+                    }
+
+                }
+            }
+        }
 
         return true;
     }
@@ -49,6 +81,8 @@ public class Main {
             for (WatchEvent event : key.pollEvents()) {
                 syncDirs(event, key);
             }
+
+            complete = !key.reset();
         }
     }
 }
