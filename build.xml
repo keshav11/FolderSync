@@ -4,9 +4,8 @@
   
   <property file="build.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
-  <!-- 
   <property name="skip.tests" value="true"/>
-   -->
+
   
   <!-- Compiler options -->
   
@@ -122,7 +121,7 @@
   </target>
   
   <target name="compile.module.foldersync.tests" depends="compile.module.foldersync.production" description="compile module FolderSync; test classes" unless="skip.tests"/>
-  
+
   <target name="clean.module.foldersync" description="cleanup module">
     <delete dir="${foldersync.output.dir}"/>
     <delete dir="${foldersync.testoutput.dir}"/>
