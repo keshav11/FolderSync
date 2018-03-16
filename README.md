@@ -13,5 +13,5 @@ git clone https://github.com/keshav11/FolderSync.git
 cd FolderSync
 ant compile
 cd out
-java foldersync.FolderSync path_to_folder1 path_to_folder1
+java foldersync.FolderSync path_to_folder1 path_to_folder2
 ```
