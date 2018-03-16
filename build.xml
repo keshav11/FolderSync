@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <target name="test">
+    <target name="test">
       <javac srcdir="src" />
-  </target>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="out" />
+        <javac srcdir="src" destdir="out"/>
+    </target>
+
 </project>

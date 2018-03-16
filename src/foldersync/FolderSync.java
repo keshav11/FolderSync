@@ -5,7 +5,7 @@ import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Main {
+public class FolderSync {
 
     private static Map<WatchKey, Path> watchKeys = new HashMap<>();
     private static boolean copy(Path modFile,  Path modPath) throws IOException {
@@ -68,8 +68,8 @@ public class Main {
 
         WatchService folderWatcher = FileSystems.getDefault().newWatchService();
 
-        String dir1 = "./test1/";
-        String dir2 = "./test2/";
+        String dir1 = args[0];
+        String dir2 = args[1];
 
         registerDir(folderWatcher, dir1);
         registerDir(folderWatcher, dir2);
