@@ -3,8 +3,7 @@
 [![Build Status](https://travis-ci.org/keshav11/FolderSync.svg?branch=master)](https://travis-ci.org/keshav11/FolderSync)      
 # FolderSync
 
-Folder Sync is service written in Java that syncs contents of folders configured by the user.
-
+FolderSync is a service written in java that keeps the contents of folders in sync birectionally. The user can provide any number of folders to be kept in sync while starting the service and FolderSync would keep them in sync. FolderSync currently only supports syncing of regular files and not folders. 
 ## Running FolderSync
 Use the following steps to clone and run FolderSync
 
