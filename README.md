@@ -14,3 +14,6 @@ ant compile
 cd out
 java foldersync.FolderSync path_to_folder1 path_to_folder2
 ```
+
+## License 
+[MIT License](https://github.com/keshav11/FolderSync/blob/master/LICENSE)
