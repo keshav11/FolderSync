@@ -20,14 +20,13 @@ public class Monitor {
         folderWatcher = FileSystems.getDefault().newWatchService();
     }
 
-    private void copy(Path modFile, Path modDir) throws IOException {
-        Path modPathSrc = Paths.get(modDir.toString(), modFile.toString());
-        for (String destDir : backupFoldersMap.get(modDir.toString())) {
-            Path modPathDest = Paths.get(destDir, modFile.toString());
-            System.out.println("[Copy]: Source " + modPathSrc.toString());
-            System.out.println("[Copy]: Destination " + modPathDest.toString());
-            Files.copy(modPathSrc, modPathDest, StandardCopyOption.REPLACE_EXISTING,
-                    StandardCopyOption.COPY_ATTRIBUTES);
+    private void copy(Path copyFile, Path copyToDir) throws IOException {
+        Path copySrc = Paths.get(copyToDir.toString(), copyFile.getFileName().toString());
+        for (String destDir : backupFoldersMap.get(copyToDir.toString())) {
+            Path copyDest = Paths.get(destDir, copyFile.toString());
+            System.out.println("[Copy]: Source " + copySrc.toString());
+            System.out.println("[Copy]: Destination " + copyDest.toString());
+            Files.copy(copySrc, copyDest, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
         }
     }
 
@@ -76,6 +75,17 @@ public class Monitor {
         return true;
     }
 
+    private void copyDirFiles(String fromDir, String toDir) throws IOException {
+        File fromDirFile = new File(fromDir);
+        for (File file : fromDirFile.listFiles()) {
+            Path filePath = Paths.get(file.getPath()).toRealPath();
+
+            Path copySrc = Paths.get(fromDirFile.toString(), filePath.getFileName().toString());
+            Path copyDest = Paths.get(toDir, filePath.getFileName().toString());
+            Files.copy(copySrc, copyDest, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        }
+    }
+
     public void registerDir(String[] dirs) throws IOException {
         if (!validateDirs(dirs))
             return;
@@ -90,6 +100,7 @@ public class Monitor {
         List<String> backupList = new ArrayList<>();
         for (int i = 1; i < dirs.length; i++) {
             backupList.add(dirs[i]);
+            copyDirFiles(master, dirs[i]);
         }
 
         backupFoldersMap.put(path.toString(), backupList);
